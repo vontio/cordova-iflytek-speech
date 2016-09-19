@@ -2,6 +2,9 @@ package com.iflytek.cordova.speech;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
@@ -63,9 +66,16 @@ public class Speech extends CordovaPlugin implements RecognizerListener, Synthes
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("initialize")) {
-            String appId = args.getString(0);
-            this.initialize(appId, callbackContext);
-
+            try{
+                ApplicationInfo appInfo = cordova.getActivity().getPackageManager()  
+                    .getApplicationInfo(cordova.getActivity().getPackageName(),  
+                            PackageManager.GET_META_DATA);  
+                String appId = appInfo.metaData.getString("iflytek.speech.AppId");
+                this.initialize(appId, callbackContext);
+            }catch(NameNotFoundException e)
+            {
+                e.printStackTrace();
+            }
         } else if (action.equals("startListening")) {
             JSONObject options = args.optJSONObject(0);
             this.startListening(options, callbackContext);

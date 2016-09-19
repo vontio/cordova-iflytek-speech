@@ -19,6 +19,7 @@ var iflytekSpeech = function () {
         'BufferProgress': channel.create('BufferProgress')
     };
     this.text = '';
+    this._initialize();
 };
 
 iflytekSpeech.prototype = {
@@ -40,7 +41,7 @@ iflytekSpeech.prototype = {
         }
     },
 
-    initialize: function (appId) {
+    _initialize: function () {
         // closure variable for local function to use
         var speech = this;
 
@@ -48,11 +49,7 @@ iflytekSpeech.prototype = {
         var callback = function (info) {
             speech._eventHandler(info);
         };
-        exec(callback, callback, 'Speech', 'initialize', [appId]);
-
-        speech.addEventListener('SpeakBegin',function(){
-            console.log('SpeakBegin');
-        });
+        exec(callback, callback, 'Speech', 'initialize', []);
 
         speech.addEventListener('SpeakCompleted',function(obj){
             if (typeof speech.onSpeakCallback === 'function') {
@@ -61,10 +58,6 @@ iflytekSpeech.prototype = {
                 else
                     speech.onSpeakCallback(null);
             }
-        });
-
-        speech.addEventListener('SpeechBegin',function(){
-            console.log("SpeechBegin");
         });
 
         speech.addEventListener('SpeechError',function(obj){

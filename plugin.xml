@@ -8,6 +8,8 @@
     <repo>https://github.com/vontio/cordova-iflytek-speech.git</repo>
     <issue>https://github.com/vontio/cordova-iflytek-speech/issues</issue>
 
+    <preference name="APP_ID" />
+
     <engines>
         <engine name="cordova" version=">=4.0.0" />
     </engines>
@@ -17,6 +19,10 @@
     </js-module>
 
     <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="application">
+            <meta-data android:name="iflytek.speech.AppId" android:value="$APP_ID"/>
+        </config-file>
+
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="Speech">
                 <param name="android-package" value="com.iflytek.cordova.speech.Speech" />
